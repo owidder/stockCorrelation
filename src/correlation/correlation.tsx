@@ -20,7 +20,7 @@ interface CorrelationState {
 }
 
 const loadData = async (symbol: string) => {
-    const response = await fetch(`/stockCorrelation/build/prices/${symbol}`);
+    const response = await fetch(`./prices/${symbol}`);
     const prices = await response.json();
 
     return prices;

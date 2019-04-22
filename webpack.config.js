@@ -6,33 +6,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 
-const {foldersToBuild} = require("./scripts/searchFolders");
-
-const PUBLIC_PATH = "public";
-
 const fs = require('fs');
 const appDirectory = fs.realpathSync(process.cwd());
 const absPath = relPath => path.resolve(appDirectory, relPath);
-
-const VERSION = require("./package.json").version;
-const INDEX = (process.env.INDEX && process.env.INDEX.length > 0 ? process.env.INDEX : "index");
-
-const folders = foldersToBuild(PUBLIC_PATH, INDEX);
-
-console.log(`version = ${VERSION}`);
-console.log(`mode = ${process.env.NODE_ENV}`)
-console.log(`index = ${INDEX}`)
-console.log(folders);
-
-const htmlWebpackPlugins = (name) => {
-    return folders.map(folder => {
-        return new HtmlWebpackPlugin({
-            filename: `${folder}/${name}.html`,
-            inject: true,
-            template: `${PUBLIC_PATH}/${folder}/${INDEX}.html`,
-        })
-    })
-}
 
 const common = {
     mode: process.env.NODE_ENV,
@@ -135,7 +111,7 @@ const common = {
 const testReactComp = {
     ...common,
     entry: {
-        testReactComp: "./src/indexTestReactComp.tsx"
+        testReactComp: "./src/testReactComp.tsx"
     },
     output: {
         ...common.output,
