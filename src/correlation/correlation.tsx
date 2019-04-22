@@ -45,6 +45,7 @@ export class Correlation extends React.Component<CorrelationProps, CorrelationSt
             <h1>{this.props.symbolX} vs. {this.props.symbolY}</h1>
             <h2>{this.state.pricesX.length > 0 ? this.state.pricesX[0].price : "NA"}</h2>
             <h2>{this.state.pricesY.length > 0 ? this.state.pricesY[0].price : "NA"}</h2>
+            <svg width={this.props.width} height={this.props.height}></svg>
         </div>
     }
 }
