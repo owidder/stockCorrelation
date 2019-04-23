@@ -1,17 +1,14 @@
 import * as React from "react";
-import {ReactNode} from "react";
-import {symbol} from "prop-types";
+import {RefObject} from "react";
+
+import {EndOfDayPrice} from "./types";
+import {drawStockPrices} from "./drawStockPrices";
 
 interface CorrelationProps {
     width: number;
     height: number;
     symbolX: string;
     symbolY: string;
-}
-
-interface EndOfDayPrice {
-    date: string;
-    price: number;
 }
 
 interface CorrelationState {
@@ -21,18 +18,14 @@ interface CorrelationState {
 
 const loadData = async (symbol: string) => {
     const response = await fetch(`./prices/${symbol}`);
-    const prices = await response.json();
-
-    return prices;
+    return await response.json();
 }
 
 export class Correlation extends React.Component<CorrelationProps, CorrelationState> {
 
     readonly state: CorrelationState = {pricesX: [], pricesY: []};
 
-    private async loadData(symbol: string) {
-
-    }
+    private svgRef: RefObject<SVGSVGElement> = React.createRef();
 
     async componentDidMount() {
         const pricesX  = await loadData(this.props.symbolX);
@@ -40,12 +33,14 @@ export class Correlation extends React.Component<CorrelationProps, CorrelationSt
         this.setState({pricesX, pricesY});
     }
 
+    componentDidUpdate() {
+        drawStockPrices(this.svgRef.current, this.props.symbolX, this.props.symbolY, this.state.pricesX, this.state.pricesY);
+    }
+
     render() {
         return <div>
             <h1>{this.props.symbolX} vs. {this.props.symbolY}</h1>
-            <h2>{this.state.pricesX.length > 0 ? this.state.pricesX[0].price : "NA"}</h2>
-            <h2>{this.state.pricesY.length > 0 ? this.state.pricesY[0].price : "NA"}</h2>
-            <svg width={this.props.width} height={this.props.height}></svg>
+            <svg ref={this.svgRef} width={this.props.width} height={this.props.height}/>
         </div>
     }
 }
