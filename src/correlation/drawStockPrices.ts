@@ -5,6 +5,8 @@ import * as ss from "simple-statistics";
 
 import {EndOfDayPrice} from "./types";
 
+import "./drawStockPrice.less";
+
 interface Dot {
     x: number;
     y: number;
@@ -128,6 +130,7 @@ export const drawStockPrices = (_svg: SVGSVGElement, symbolX: string, symbolY: s
         selection.enter()
             .append("text")
             .attr("class", "correlation")
+            .style("font-size", Math.min(width, height))
             .attr("transform", translate(width/2, height/2))
             .merge(selection)
             .text(correlation)
