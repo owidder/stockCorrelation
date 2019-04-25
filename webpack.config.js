@@ -2,7 +2,6 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 
@@ -67,7 +66,7 @@ const common = {
                     },
                     {
                         test: /\.css$/,
-                        use: [{loader: MiniCssExtractPlugin.loader}, "css-loader"]
+                        use: ["style-loader", "css-loader"]
                     },
                     {
                         test: /\.special.html$/,
