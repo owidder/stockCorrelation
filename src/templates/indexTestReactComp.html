@@ -2,8 +2,28 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        .outer-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 95vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inner-container {
+            width: 75vw;
+            height: 75vh;
+        }
+    </style>
 </head>
 <body>
-<div id="container" class="full"></div>
+<div class="outer-container">
+    <div class="inner-container" id="container"></div>
+</div>
 </body>
 </html>

@@ -130,7 +130,7 @@ export const drawStockPrices = (_svg: SVGSVGElement, symbolX: string, symbolY: s
         selection.enter()
             .append("text")
             .attr("class", "correlation")
-            .style("font-size", Math.min(width, height))
+            .style("font-size", Math.min(width, height) * .9)
             .attr("transform", translate(width/2, height/2))
             .merge(selection)
             .text(correlation)

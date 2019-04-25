@@ -36,31 +36,29 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
     private containerRef: RefObject<HTMLDivElement> = React.createRef();
 
     componentDidMount(): void {
-        setTimeout(() => {
-            const containerRect = this.containerRef.current.getBoundingClientRect();
-            this.setState({width: containerRect.width, height: containerRect.height});
-        }, 1000)
+        const containerRect = this.containerRef.current.getBoundingClientRect();
+        this.setState({width: containerRect.width, height: containerRect.height});
     }
 
     render() {
         return <div className="full">
             <Row>
-                <Col span={8}>
+                <Col span={10}>
                     <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolX}/>
                 </Col>
-                <Col span={8}>
+                <Col span={4}></Col>
+                <Col span={10}>
                     <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolY}/>
                 </Col>
             </Row>
             <Row className="full">
-                <Col span={16} className="full">
+                <Col span={24} className="full">
                     <div className="full" ref={this.containerRef}>
                         {this.state.width > 400 && this.state.height > 300 ?
                             <Correlation width={this.state.width} height={this.state.height} symbolX={this.state.symbolX} symbolY={this.state.symbolY}/> :
                             <span>not enough space: {this.state.width} / {this.state.height}</span>}
                     </div>
                 </Col>
-                <Col span={8}>123</Col>
             </Row>
         </div>
     }
