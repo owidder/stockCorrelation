@@ -2,7 +2,7 @@ import * as React from "react";
 import {RefObject} from "react";
 
 import {EndOfDayPrice} from "./types";
-import {drawStockPrices} from "./drawStockPrices";
+import {initScatterPlot, DrawFunction} from "./drawStockPrices2";
 
 interface CorrelationProps {
     width: number;
@@ -11,30 +11,30 @@ interface CorrelationProps {
     symbolY: string;
 }
 
-interface CorrelationState {
-    pricesX: EndOfDayPrice[];
-    pricesY: EndOfDayPrice[];
-}
-
 const loadData = async (symbol: string) => {
     const response = await fetch(`./prices/${symbol}`);
     return await response.json();
 }
 
-export class Correlation extends React.Component<CorrelationProps, CorrelationState> {
-
-    readonly state: CorrelationState = {pricesX: [], pricesY: []};
+export class Correlation extends React.Component<CorrelationProps> {
 
     private svgRef: RefObject<SVGSVGElement> = React.createRef();
 
-    async componentDidMount() {
+    private drawScatterPlot: DrawFunction;
+
+    componentDidMount() {
+        this.drawScatterPlot = initScatterPlot(this.svgRef.current);
+        this.draw();
+    }
+
+    async draw() {
         const pricesX  = await loadData(this.props.symbolX);
         const pricesY  = await loadData(this.props.symbolY);
-        this.setState({pricesX, pricesY});
+        this.drawScatterPlot(this.props.symbolX, this.props.symbolY, pricesX, pricesY);
     }
 
     componentDidUpdate() {
-        drawStockPrices(this.svgRef.current, this.props.symbolX, this.props.symbolY, this.state.pricesX, this.state.pricesY);
+        this.draw();
     }
 
     render() {

@@ -44,11 +44,11 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
         return <div className="full">
             <Row>
                 <Col span={10}>
-                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolX}/>
+                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolX} onChange={symbolX => this.setState({symbolX})}/>
                 </Col>
                 <Col span={4}></Col>
                 <Col span={10}>
-                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolY}/>
+                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolY} onChange={symbolY => this.setState({symbolY})}/>
                 </Col>
             </Row>
             <Row className="full">
