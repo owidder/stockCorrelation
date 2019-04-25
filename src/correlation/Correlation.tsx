@@ -2,7 +2,7 @@ import * as React from "react";
 import {RefObject} from "react";
 
 import {EndOfDayPrice} from "./types";
-import {initScatterPlot, DrawFunction} from "./drawStockPrices2";
+import {initScatterPlot, DrawFunction} from "./stockPricesScatterPlot";
 
 interface CorrelationProps {
     width: number;
