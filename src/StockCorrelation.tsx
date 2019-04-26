@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Row, Col} from "antd";
+import * as d3 from "d3";
 
 import {SelectSymbol} from "./SelectSymbol";
 import {Correlation} from "./correlation/Correlation";
@@ -20,6 +21,7 @@ interface StockCorrelationState {
     symbolY: string;
     width: number;
     height: number;
+    symbolMap: {[key: string]: string}
 }
 
 const SYMBOLS = ["^DJI", "^IXIC", "AAPL", "BTC-USD", "ETH-USD", "FB", "GE", "GM", "HPE", "MSFT", "PG", "WMT", "XOM"];
@@ -30,25 +32,34 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
         symbolX: this.props.symbolX || "FB",
         symbolY: this.props.symbolY || "AAPL",
         width: 0,
-        height: 0
+        height: 0,
+        symbolMap: {}
     }
 
     private containerRef: RefObject<HTMLDivElement> = React.createRef();
 
-    componentDidMount(): void {
+    async componentDidMount() {
+        const symbols = await d3.csv("./symbols.csv");
+        const symbolMap = symbols.reduce((map, symbol) => {
+            return {...map, [symbol.symbol]: symbol.name}
+        }, {});
         const containerRect = this.containerRef.current.getBoundingClientRect();
-        this.setState({width: containerRect.width, height: containerRect.height});
+        this.setState({width: containerRect.width, height: containerRect.height, symbolMap});
     }
 
     render() {
         return <div className="full">
             <Row>
                 <Col span={10}>
-                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolX} onChange={symbolX => this.setState({symbolX})}/>
+                    <SelectSymbol symbolMap={this.state.symbolMap}
+                                  selected={this.state.symbolX}
+                                  onChange={symbolX => this.setState({symbolX})}/>
                 </Col>
                 <Col span={4}></Col>
                 <Col span={10}>
-                    <SelectSymbol symbols={SYMBOLS} selected={this.state.symbolY} onChange={symbolY => this.setState({symbolY})}/>
+                    <SelectSymbol symbolMap={this.state.symbolMap}
+                                  selected={this.state.symbolY}
+                                  onChange={symbolY => this.setState({symbolY})}/>
                 </Col>
             </Row>
             <Row className="full">
