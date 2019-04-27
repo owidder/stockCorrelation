@@ -23,8 +23,6 @@ interface StockCorrelationState {
     symbolMap: {[key: string]: string}
 }
 
-const SYMBOLS = ["^DJI", "^IXIC", "AAPL", "BTC-USD", "ETH-USD", "FB", "GE", "GM", "HPE", "MSFT", "PG", "WMT", "XOM"];
-
 export class StockCorrelation extends React.Component<StockCorrelationProps, StockCorrelationState> {
 
     readonly state: StockCorrelationState = {
