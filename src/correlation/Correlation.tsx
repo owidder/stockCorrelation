@@ -40,7 +40,6 @@ export class Correlation extends React.Component<CorrelationProps> {
 
     render() {
         return <div>
-            <h1>{this.props.symbolX} vs. {this.props.symbolY}</h1>
             <svg ref={this.svgRef} width={this.props.width} height={this.props.height}/>
         </div>
     }

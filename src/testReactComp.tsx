@@ -7,8 +7,8 @@ const queryString = require("query-string");
 
 const params= queryString.parse(window.location.hash);
 
-const symbolX = params.x || "FB";
-const symbolY = params.y || "AAPL";
+const symbolX = params.x;
+const symbolY = params.y;
 
 const setParams = (symbolX: string, symbolY: string) => {
     const newParams = {x: symbolX, y: symbolY};

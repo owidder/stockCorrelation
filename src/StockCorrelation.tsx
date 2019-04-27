@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Row, Col} from "antd";
 import * as d3 from "d3";
+import * as _ from "lodash";
 
 import {SelectSymbol} from "./SelectSymbol";
 import {Correlation} from "./correlation/Correlation";
@@ -8,6 +9,11 @@ import {Correlation} from "./correlation/Correlation";
 import "antd/dist/antd.css";
 import "./StockCorrelation.less";
 import {RefObject} from "react";
+import {on} from "cluster";
+
+export interface SymbolMap {
+    [key: string]: string;
+}
 
 interface StockCorrelationProps {
     symbolX?: string;
@@ -20,7 +26,20 @@ interface StockCorrelationState {
     symbolY: string;
     width: number;
     height: number;
-    symbolMap: {[key: string]: string}
+    symbolMap: SymbolMap
+}
+
+const chooseRandomSymbol = (symbolMap: SymbolMap) => {
+    const symbols = _.keys(symbolMap);
+    const randomIndex = _.random(symbols.length - 1);
+    return symbols[randomIndex];
+}
+
+const getSymbolMap = async (): Promise<SymbolMap> => {
+    const symbols = await d3.csv("./symbols.csv");
+    return symbols.reduce((map, symbol) => {
+        return {...map, [symbol.symbol]: symbol.name}
+    }, {});
 }
 
 export class StockCorrelation extends React.Component<StockCorrelationProps, StockCorrelationState> {
@@ -36,13 +55,12 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
     private containerRef: RefObject<HTMLDivElement> = React.createRef();
 
     async componentDidMount() {
-        const symbols = await d3.csv("./symbols.csv");
-        const symbolMap = symbols.reduce((map, symbol) => {
-            return {...map, [symbol.symbol]: symbol.name}
-        }, {});
+        const symbolMap = await getSymbolMap();
         const containerRect = this.containerRef.current.getBoundingClientRect();
-        this.setState({width: containerRect.width, height: containerRect.height, symbolMap});
-        this.props.symbolChangedCallback(this.state.symbolX, this.state.symbolY);
+        const symbolX = this.state.symbolX || chooseRandomSymbol(symbolMap);
+        const symbolY = this.state.symbolY || chooseRandomSymbol(symbolMap);
+        this.setState({width: containerRect.width, height: containerRect.height, symbolMap, symbolX, symbolY});
+        this.props.symbolChangedCallback(symbolX, symbolY);
     }
 
     changeX(symbolX: string) {
@@ -55,19 +73,25 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
         this.props.symbolChangedCallback(this.state.symbolX, symbolY);
     }
 
+    renderSelectSymbol(selectedSymbol: string, onChange: (symbol: string) => void) {
+        if(selectedSymbol) {
+            return <SelectSymbol symbolMap={this.state.symbolMap}
+                                  selected={selectedSymbol}
+                                  onChange={onChange}/>
+        }
+
+        return <span>Nothing selected</span>
+    }
+
     render() {
         return <div className="full">
             <Row>
                 <Col span={10}>
-                    <SelectSymbol symbolMap={this.state.symbolMap}
-                                  selected={this.state.symbolY}
-                                  onChange={symbolX => this.changeY(symbolX)}/>
+                    {this.renderSelectSymbol(this.state.symbolY, symbol => this.changeY(symbol))}
                 </Col>
-                <Col span={4}/>
+                <Col span={4}><h1 style={{textAlign: "center"}}>vs</h1></Col>
                 <Col span={10}>
-                    <SelectSymbol symbolMap={this.state.symbolMap}
-                                  selected={this.state.symbolX}
-                                  onChange={symbolY => this.changeX(symbolY)}/>
+                    {this.renderSelectSymbol(this.state.symbolX, symbol => this.changeX(symbol))}
                 </Col>
             </Row>
             <Row className="full">
