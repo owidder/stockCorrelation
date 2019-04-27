@@ -175,7 +175,7 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
             plotG.selectAll("circle.dot")
                 .on("mouseover", function(d) {
                     const instance = this._tippy;
-                    instance && instance.setContent(d.date + ":<br>" + symbolMap[symbolX] + ": $ " + Number(d.x).toFixed(1) + "<br>" + symbolMap[symbolY] + ": $ " + Number(d.y).toFixed(1));
+                    instance && instance.setContent(d.date + ":<br>" + symbolMap[symbolX] + ": " + Number(d.x).toFixed(1) + "<br>" + symbolMap[symbolY] + ": " + Number(d.y).toFixed(1));
                 })
                 .transition()
                 .duration(function() {return _.random(3000, 4000)})

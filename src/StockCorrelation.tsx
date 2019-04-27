@@ -14,6 +14,7 @@ interface StockCorrelationProps {
     height: number;
     symbolX?: string;
     symbolY?: string;
+    symbolChangedCallback: (symbolX: string, symbolY: string) => void;
 }
 
 interface StockCorrelationState {
@@ -29,8 +30,8 @@ const SYMBOLS = ["^DJI", "^IXIC", "AAPL", "BTC-USD", "ETH-USD", "FB", "GE", "GM"
 export class StockCorrelation extends React.Component<StockCorrelationProps, StockCorrelationState> {
 
     readonly state: StockCorrelationState = {
-        symbolX: this.props.symbolX || "FB",
-        symbolY: this.props.symbolY || "AAPL",
+        symbolX: this.props.symbolX,
+        symbolY: this.props.symbolY,
         width: 0,
         height: 0,
         symbolMap: {}
@@ -45,6 +46,17 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
         }, {});
         const containerRect = this.containerRef.current.getBoundingClientRect();
         this.setState({width: containerRect.width, height: containerRect.height, symbolMap});
+        this.props.symbolChangedCallback(this.state.symbolX, this.state.symbolY);
+    }
+
+    changeX(symbolX: string) {
+        this.setState({symbolX});
+        this.props.symbolChangedCallback(symbolX, this.state.symbolY);
+    }
+
+    changeY(symbolY: string) {
+        this.setState({symbolY});
+        this.props.symbolChangedCallback(this.state.symbolX, symbolY);
     }
 
     render() {
@@ -53,13 +65,13 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
                 <Col span={10}>
                     <SelectSymbol symbolMap={this.state.symbolMap}
                                   selected={this.state.symbolY}
-                                  onChange={symbolY => this.setState({symbolY})}/>
+                                  onChange={symbolX => this.changeY(symbolX)}/>
                 </Col>
-                <Col span={4}></Col>
+                <Col span={4}/>
                 <Col span={10}>
                     <SelectSymbol symbolMap={this.state.symbolMap}
                                   selected={this.state.symbolX}
-                                  onChange={symbolX => this.setState({symbolX})}/>
+                                  onChange={symbolY => this.changeX(symbolY)}/>
                 </Col>
             </Row>
             <Row className="full">
