@@ -10,8 +10,6 @@ import "./StockCorrelation.less";
 import {RefObject} from "react";
 
 interface StockCorrelationProps {
-    width: number;
-    height: number;
     symbolX?: string;
     symbolY?: string;
     symbolChangedCallback: (symbolX: string, symbolY: string) => void;
