@@ -9,6 +9,7 @@ interface CorrelationProps {
     height: number;
     symbolX: string;
     symbolY: string;
+    symbolMap: {[key: string]: string}
 }
 
 const loadData = async (symbol: string) => {
@@ -23,14 +24,14 @@ export class Correlation extends React.Component<CorrelationProps> {
     private drawScatterPlot: DrawFunction;
 
     componentDidMount() {
-        this.drawScatterPlot = initScatterPlot(this.svgRef.current);
+        this.drawScatterPlot = initScatterPlot(this.svgRef.current, this.props.symbolMap);
         this.draw();
     }
 
     async draw() {
         const pricesX  = await loadData(this.props.symbolX);
         const pricesY  = await loadData(this.props.symbolY);
-        this.drawScatterPlot(this.props.symbolX, this.props.symbolY, pricesX, pricesY);
+        this.drawScatterPlot(this.props.symbolX, this.props.symbolY, pricesX, pricesY, this.props.symbolMap);
     }
 
     componentDidUpdate() {

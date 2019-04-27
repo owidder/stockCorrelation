@@ -14,9 +14,11 @@ interface Dot {
     id: number;
 }
 
-export type DrawFunction = (symbolX: string, symbolY: string, pricesX: EndOfDayPrice[], pricesY: EndOfDayPrice[]) => void;
+export type DrawFunction = (symbolX: string, symbolY: string,
+                            pricesX: EndOfDayPrice[], pricesY: EndOfDayPrice[],
+                            symbolMap: {[key: string]: string}) => void;
 
-export const initScatterPlot = (_svg: SVGSVGElement): DrawFunction => {
+export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: string}): DrawFunction => {
     const width = _svg.getBoundingClientRect().width;
     const height = _svg.getBoundingClientRect().height;
 
@@ -155,8 +157,8 @@ export const initScatterPlot = (_svg: SVGSVGElement): DrawFunction => {
 
             axis.transition().duration(1000).selectAll(".xaxis").call(d3.axisBottom(xScale));
             axis.transition().duration(1000).selectAll(".yaxis").call(d3.axisLeft(yScale));
-            axis.select(".xlabel").text(symbolX);
-            axis.select(".ylabel").text(symbolY);
+            axis.select(".xlabel").text(symbolMap[symbolX]);
+            axis.select(".ylabel").text(symbolMap[symbolY]);
 
             const data = plotG.selectAll("circle.dot").data(plotData);
 
@@ -173,7 +175,7 @@ export const initScatterPlot = (_svg: SVGSVGElement): DrawFunction => {
             plotG.selectAll("circle.dot")
                 .on("mouseover", function(d) {
                     const instance = this._tippy;
-                    instance && instance.setContent(d.date + ":<br>" + symbolX + ": $ " + Number(d.x).toFixed(1) + "<br>" + symbolY + ": $ " + Number(d.y).toFixed(1));
+                    instance && instance.setContent(d.date + ":<br>" + symbolMap[symbolX] + ": $ " + Number(d.x).toFixed(1) + "<br>" + symbolMap[symbolY] + ": $ " + Number(d.y).toFixed(1));
                 })
                 .transition()
                 .duration(function() {return _.random(3000, 4000)})

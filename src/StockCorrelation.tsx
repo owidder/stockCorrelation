@@ -52,21 +52,23 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
             <Row>
                 <Col span={10}>
                     <SelectSymbol symbolMap={this.state.symbolMap}
-                                  selected={this.state.symbolX}
-                                  onChange={symbolX => this.setState({symbolX})}/>
+                                  selected={this.state.symbolY}
+                                  onChange={symbolY => this.setState({symbolY})}/>
                 </Col>
                 <Col span={4}></Col>
                 <Col span={10}>
                     <SelectSymbol symbolMap={this.state.symbolMap}
-                                  selected={this.state.symbolY}
-                                  onChange={symbolY => this.setState({symbolY})}/>
+                                  selected={this.state.symbolX}
+                                  onChange={symbolX => this.setState({symbolX})}/>
                 </Col>
             </Row>
             <Row className="full">
                 <Col span={24} className="full">
                     <div className="full" ref={this.containerRef}>
                         {this.state.width > 400 && this.state.height > 300 ?
-                            <Correlation width={this.state.width} height={this.state.height} symbolX={this.state.symbolX} symbolY={this.state.symbolY}/> :
+                            <Correlation width={this.state.width} height={this.state.height}
+                                         symbolX={this.state.symbolX} symbolY={this.state.symbolY}
+                                         symbolMap={this.state.symbolMap}/> :
                             <span>not enough space: {this.state.width} / {this.state.height}</span>}
                     </div>
                 </Col>
