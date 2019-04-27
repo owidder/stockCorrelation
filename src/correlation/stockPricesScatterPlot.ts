@@ -31,12 +31,12 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
 
     const svg = d3.select(_svg);
 
-    const correlationG = svg.append("g");
-    const plotG = svg.append("g");
-    const meanG = svg.append("g");
-    const linearRegressionG = svg.append("g");
-    const linearRegressionMiddleG = svg.append("g");
-    const axis = svg.append("g");
+    const correlationG = svg.append("g").attr("class", "correlationG");
+    const meanG = svg.append("g").attr("class", "meanG");
+    const linearRegressionG = svg.append("g").attr("class", "linearRegressionG");
+    const linearRegressionMiddleG = svg.append("g").attr("class", "linearRegressionMiddleG");
+    const axis = svg.append("g").attr("class", "axis");
+    const plotG = svg.append("g").attr("class", "plotG");
 
     const translate = (x: number, y: number) => {
         return "translate(" + String(x) + "," + String(y) + ")"
