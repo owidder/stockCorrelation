@@ -12,7 +12,7 @@ export class SelectSymbol extends React.Component<SelectSymbolProps> {
 
     render() {
         return <div className="input-field">
-            <Select defaultValue={this.props.selected} onChange={this.props.onChange}>
+            <Select defaultValue={this.props.selected} onChange={this.props.onChange} showSearch>
                 {_.keys(this.props.symbolMap).map((symbol, i) => {
                     return <Select.Option value={symbol} key={i}>{this.props.symbolMap[symbol]}</Select.Option>
                 })}
