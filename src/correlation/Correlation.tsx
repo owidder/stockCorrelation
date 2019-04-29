@@ -12,7 +12,7 @@ interface CorrelationProps {
     symbolMap: {[key: string]: string}
 }
 
-const loadData = async (symbol: string) => {
+const loadData = async (symbol: string): Promise<EndOfDayPrice[]> => {
     const response = await fetch(`./prices/${symbol}`);
     return await response.json();
 }
@@ -29,9 +29,13 @@ export class Correlation extends React.Component<CorrelationProps> {
     }
 
     async draw() {
-        const pricesX  = await loadData(this.props.symbolX);
-        const pricesY  = await loadData(this.props.symbolY);
-        this.drawScatterPlot(this.props.symbolX, this.props.symbolY, pricesX, pricesY, this.props.symbolMap);
+        if(this.props.symbolX && this.props.symbolY) {
+            const pricesX  = await loadData(this.props.symbolX);
+            const pricesY  = await loadData(this.props.symbolY);
+            if(pricesX.length > 0 && pricesY.length > 0) {
+                this.drawScatterPlot(this.props.symbolX, this.props.symbolY, pricesX, pricesY, this.props.symbolMap);
+            }
+        }
     }
 
     componentDidUpdate() {

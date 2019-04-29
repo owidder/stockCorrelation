@@ -1,22 +1,46 @@
 import * as React from "react";
-import {Select} from "antd";
 import * as _ from "lodash";
+import {AutoComplete} from "antd";
 
 interface SelectSymbolProps {
-    symbolMap: {[key: string]: string};
+    symbols: Symbol[];
     selected: string;
     onChange: (symbol: string)  => void;
 }
 
-export class SelectSymbol extends React.Component<SelectSymbolProps> {
+interface SelectSymbolState {
+    data: Array<string>;
+}
+
+export interface Symbol {
+    short: string;
+    full: string;
+}
+
+export class SelectSymbol extends React.Component<SelectSymbolProps, SelectSymbolState> {
+
+    readonly state: SelectSymbolState = {data: []};
+
+    handleSearch(text: string) {
+        const data = _.uniq(this.props.symbols.map(symbol => symbol.full).filter(full => full.toLowerCase().indexOf(text.toLowerCase()) > -1));
+        console.log(data);
+        this.setState({data})
+    }
+
+    handleSelect(full: string) {
+        const short = this.props.symbols.find(s => s.full == full).short;
+        this.props.onChange(short);
+    }
+
 
     render() {
         return <div className="input-field">
-            <Select defaultValue={this.props.selected} onChange={this.props.onChange} showSearch>
-                {_.keys(this.props.symbolMap).map((symbol, i) => {
-                    return <Select.Option value={symbol} key={i}>{this.props.symbolMap[symbol]}</Select.Option>
-                })}
-            </Select>
+            <AutoComplete
+                dataSource={this.state.data}
+                onSearch={(text) => this.handleSearch(text)}
+                onSelect={this.handleSelect.bind(this)}
+                defaultValue={this.props.selected}
+                placeholder="Enter company"/>
         </div>
     }
 }

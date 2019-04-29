@@ -3,13 +3,12 @@ import {Row, Col} from "antd";
 import * as d3 from "d3";
 import * as _ from "lodash";
 
-import {SelectSymbol} from "./SelectSymbol";
+import {SelectSymbol, Symbol} from "./SelectSymbol";
 import {Correlation} from "./correlation/Correlation";
 
 import "antd/dist/antd.css";
 import "./StockCorrelation.less";
 import {RefObject} from "react";
-import {on} from "cluster";
 
 export interface SymbolMap {
     [key: string]: string;
@@ -40,6 +39,15 @@ const getSymbolMap = async (): Promise<SymbolMap> => {
     return symbols.reduce((map, symbol) => {
         return {...map, [symbol.symbol]: symbol.name}
     }, {});
+}
+
+const symbolMapToSymbols = (symbolMap: SymbolMap): Symbol[] => {
+    return _.keys(symbolMap).map(key => {
+        return {
+            short: key,
+            full: symbolMap[key]
+        }
+    })
 }
 
 export class StockCorrelation extends React.Component<StockCorrelationProps, StockCorrelationState> {
@@ -75,7 +83,8 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
 
     renderSelectSymbol(selectedSymbol: string, onChange: (symbol: string) => void) {
         if(selectedSymbol) {
-            return <SelectSymbol symbolMap={this.state.symbolMap}
+            const symbols = symbolMapToSymbols(this.state.symbolMap);
+            return <SelectSymbol symbols={symbols}
                                   selected={selectedSymbol}
                                   onChange={onChange}/>
         }
