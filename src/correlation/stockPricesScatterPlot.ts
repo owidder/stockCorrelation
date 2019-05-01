@@ -14,6 +14,8 @@ interface Dot {
     id: number;
 }
 
+type Scale = (number) => number;
+
 export type DrawFunction = (symbolX: string, symbolY: string,
                             pricesX: EndOfDayPrice[], pricesY: EndOfDayPrice[],
                             symbolMap: {[key: string]: string}) => void;
@@ -48,7 +50,7 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
         })
     }
 
-    const scale = (data: any, attrName: string, rangeMin: number, rangeMax: number) => {
+    const scale = (data: any, attrName: string, rangeMin: number, rangeMax: number): Scale => {
         const min = _.minBy(data, attrName)[attrName];
         const max = _.maxBy(data, attrName)[attrName];
         return d3.scaleLinear().domain([min, max]).range([rangeMin, rangeMax]);
@@ -86,8 +88,8 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
         return _.random(0, max) + Math.sign(_.random(-1000, 1000, true)) * max;
     }
 
-    function drawLinearRegressionLine(plotData, xScale, yScale) {
-        const points = plotData.map(function(d) {return [d.x, d.y]})
+    function drawLinearRegressionLine(plotData: Dot[], xScale: Scale, yScale: Scale) {
+        const points = plotData.map(d => {return [d.x, d.y]});
 
         const linearRegressionObject = ss.linearRegression(points);
 
