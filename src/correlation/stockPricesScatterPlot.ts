@@ -24,8 +24,8 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
     const width = _svg.getBoundingClientRect().width;
     const height = _svg.getBoundingClientRect().height;
 
-    const MARGIN_X = 100;
-    const MARGIN_Y = 100;
+    const MARGIN_X = 50;
+    const MARGIN_Y = 50;
     const leftX = MARGIN_X;
     const rightX = width - MARGIN_X;
     const upperY = MARGIN_Y;
@@ -136,7 +136,7 @@ export const initScatterPlot = (_svg: SVGSVGElement, symbolMap: {[key: string]: 
         selection.enter()
             .append("text")
             .attr("class", "correlation")
-            .style("font-size", Math.min(width, height) * .9)
+            .style("font-size", Math.min(width, height) * .6)
             .attr("transform", translate(width/2, height/2))
             .merge(selection)
             .text(correlation)

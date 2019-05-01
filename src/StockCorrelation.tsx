@@ -110,7 +110,7 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
             <Row className="full">
                 <Col span={24} className="full">
                     <div className="full" ref={this.containerRef}>
-                        {this.state.width > 400 && this.state.height > 300 ?
+                        {this.state.width > 300 && this.state.height > 300 ?
                             <Correlation width={this.state.width} height={this.state.height}
                                          symbolX={this.state.symbolX} symbolY={this.state.symbolY}
                                          symbolMap={this.state.symbolMap}/> :
