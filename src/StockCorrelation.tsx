@@ -84,9 +84,13 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
     renderSelectSymbol(selectedSymbol: string, onChange: (symbol: string) => void) {
         if(selectedSymbol) {
             const symbols = symbolMapToSymbols(this.state.symbolMap);
-            return <SelectSymbol symbols={symbols}
-                                  selected={selectedSymbol}
-                                  onChange={onChange}/>
+            const companyName = this.state.symbolMap[selectedSymbol];
+            return <div>
+                <small>Enter Company</small>
+                <SelectSymbol symbols={symbols}
+                                  selected={companyName}
+                                      onChange={onChange}/>
+            </div>
         }
 
         return <span>Nothing selected</span>

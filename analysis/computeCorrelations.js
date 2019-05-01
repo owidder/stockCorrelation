@@ -50,7 +50,7 @@ csv().fromFile("../public/symbols.csv").then(symbols => {
             //console.log(`${nameX}/${nameY}: ${xValues.length}:${yValues.length} (${i}-${j}) -- ${symbolX}/${symbolY}`)
             const correlation = ss.sampleCorrelation(xValues, yValues).toFixed(1);
 
-            if(!isNaN(correlation)) {
+            if(!isNaN(correlation) && (Math.abs(correlation) > 0.8 || Math.abs(correlation) < .2)) {
                 const correlationStr = String(correlation).replace(".", ",");
                 console.log(`${nameX}\t${nameY}\t${correlationStr}`);
             }

@@ -10,6 +10,7 @@ interface SelectSymbolProps {
 
 interface SelectSymbolState {
     data: Array<string>;
+    value?: string;
 }
 
 export interface Symbol {
@@ -21,15 +22,15 @@ export class SelectSymbol extends React.Component<SelectSymbolProps, SelectSymbo
 
     readonly state: SelectSymbolState = {data: []};
 
-    handleSearch(text: string) {
-        const data = _.uniq(this.props.symbols.map(symbol => symbol.full).filter(full => full.toLowerCase().indexOf(text.toLowerCase()) > -1));
-        console.log(data);
-        this.setState({data})
+    handleSearch(value: string) {
+        const data = _.uniq(this.props.symbols.map(symbol => symbol.full).filter(full => full.toLowerCase().indexOf(value.toLowerCase()) > -1));
+        this.setState({data, value})
     }
 
     handleSelect(full: string) {
         const short = this.props.symbols.find(s => s.full == full).short;
         this.props.onChange(short);
+        this.setState({value: full})
     }
 
 
@@ -39,7 +40,7 @@ export class SelectSymbol extends React.Component<SelectSymbolProps, SelectSymbo
                 dataSource={this.state.data}
                 onSearch={(text) => this.handleSearch(text)}
                 onSelect={this.handleSelect.bind(this)}
-                defaultValue={this.props.selected}
+                value={this.state.value || this.props.selected}
                 placeholder="Enter company"/>
         </div>
     }
