@@ -86,7 +86,7 @@ export class StockCorrelation extends React.Component<StockCorrelationProps, Sto
             const symbols = symbolMapToSymbols(this.state.symbolMap);
             const companyName = this.state.symbolMap[selectedSymbol];
             return <div>
-                <small>Enter Company</small>
+                <small>enter company</small>
                 <SelectSymbol symbols={symbols}
                                   selected={companyName}
                                       onChange={onChange}/>
